@@ -1,0 +1,1 @@
+{"version":3,"file":"toggle.contract.d.ts","sourceRoot":"","sources":["../../contract/toggle.contract.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,gBAAgB;IAC7B,UAAU,IAAI,OAAO,CAAC,OAAO,CAAC,CAAA;CACjC;AAED,qBAAa,OAAO;IAGhB,aAAa,CAAC,EAAE,OAAO,CAAA;CAC1B"}

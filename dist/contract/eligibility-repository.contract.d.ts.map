@@ -1,0 +1,1 @@
+{"version":3,"file":"eligibility-repository.contract.d.ts","sourceRoot":"","sources":["../../contract/eligibility-repository.contract.ts"],"names":[],"mappings":"AAAA,qBAAa,2BAA2B;IAEpC,WAAW,CAAC,EAAE,OAAO,CAAA;CACxB;AAED,MAAM,WAAW,6BAA6B;IAG1C,QAAQ,CAAC,IAAI,EAAE,OAAO,GAAG,OAAO,CAAC,2BAA2B,CAAC,CAAC;CACjE"}

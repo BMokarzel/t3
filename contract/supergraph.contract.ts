@@ -1,8 +1,9 @@
 export interface Supergraph {
-    GetClientInfo(): Promise<ClientInfo>
+    getClientInfo(): Promise<ClientInfo>
 }
 
 export class ClientInfo {
+    // NOTA(casing): ver toggle.contract.ts.
     RetailAccount?: boolean
     EmployeeAccount?: boolean
 }

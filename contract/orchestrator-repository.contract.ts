@@ -1,12 +1,13 @@
 export class EnrollmentStatusResponse {
+    // NOTA(casing): ver toggle.contract.ts.
     Household?: boolean
     FinancialProfile?: boolean
 }
 
 export interface EnrollmentOrchestratorRepository {
-    GetStatus(): Promise<EnrollmentStatusResponse>;
+    getStatus(): Promise<EnrollmentStatusResponse>;
 
-    Init(): Promise<void>;
+    init(): Promise<void>;
 
-    Finish(): Promise<void>;
+    finish(): Promise<void>;
 }

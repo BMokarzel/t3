@@ -1,10 +1,10 @@
-import { StepSubmissionResult } from "./service";
-import { EnrollmentStep } from "./step.contract";
+import { StepSubmissionResult } from "./service.contract.js";
+import { EnrollmentStep } from "./step.contract.js";
 
 export interface EnrollmentFlow {
-    SubmitStep(step: string, payload: any): Promise<StepSubmissionResult>;
-    GetStep(stepKey: string): EnrollmentStep<any, any>;
-    GetCurrentStep(): EnrollmentStep<any, any>;
+    submitStep(step: string, payload: any): Promise<StepSubmissionResult>;
+    getStep(stepKey: string): EnrollmentStep<any, any>;
+    getCurrentStep(): EnrollmentStep<any, any>;
 }
 
 export { StepSubmissionResult };

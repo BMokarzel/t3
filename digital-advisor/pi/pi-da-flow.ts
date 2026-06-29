@@ -1,17 +1,11 @@
-import { EnrollmentFlow, StepSubmissionResult } from "../../contract/enrollment-flow.contract";
-import { Logger } from "../../contract/logger.contract";
-import { Trace } from "../../contract/observability.contract";
-import { EnrollmentStepRepository } from "../../contract/step-repository";
-import {
-    PIFinancialProfilePInput,
-    PIFinancialProfileOutput,
-    PIFinancialProfileStep,
-} from "../../commun/steps/pi-financial-profile";
-import { EnrollmentStep } from "../../contract/step.contract";
+import { EnrollmentFlow, StepSubmissionResult } from "../../contract/enrollment-flow.contract.js";
+import { EnrollmentStep } from "../../contract/step.contract.js";
+import { PIFinancialProfileOutput } from "../../common/steps/pi-financial-profile.js";
+import { PIFinancialProfileInput } from "../../validation/pi-financial-profile.schema.js";
 
 export interface PIStepTypeMap {
     "financial-profile": {
-        input: PIFinancialProfilePInput;
+        input: PIFinancialProfileInput;
         output: PIFinancialProfileOutput;
     };
     // "risk-quiz": { input: RiskQuizInput; output: RiskQuizOutput };
@@ -20,18 +14,18 @@ export interface PIStepTypeMap {
 export type PIStepKey = keyof PIStepTypeMap;
 
 export class PIDAEnrollmentFlow implements EnrollmentFlow {
-    private readonly steps: Map<PIStepKey, EnrollmentStep<any, any>>;
-
+    // O flow recebe o Map de steps PRONTO (ver createDefaultPISteps) — assim ele
+    // não conhece construção de step nem deps de infra, fica testável (injeta
+    // steps fake) e evita "fat constructor".
+    //
+    // O Map é heterogêneo (cada chave tem input/output diferentes), então o
+    // `any` AQUI é inerente ao container — não dá para tipar um Map heterogêneo
+    // sem mapped types. A segurança de tipos vem dos acessores tipados por chave
+    // (`internalGetStep<K>`). Não trocar por `unknown`: um step concreto não é
+    // atribuível a EnrollmentStep<unknown, unknown> sob strictFunctionTypes.
     private constructor(
-        private readonly aveRepository: EnrollmentStepRepository,
-        private readonly pm5Repository: EnrollmentStepRepository,
-        private readonly logger: Logger,
-        private readonly trace: Trace,
-    ) {
-        this.steps = new Map<PIStepKey, EnrollmentStep<any, any>>([
-            ["financial-profile", PIFinancialProfileStep.create(aveRepository, pm5Repository, logger, trace)],
-        ]);
-    }
+        private readonly steps: Map<PIStepKey, EnrollmentStep<any, any>>,
+    ) {}
 
     private resolveKey(stepKey: string): PIStepKey {
         if (!this.steps.has(stepKey as PIStepKey)) {
@@ -50,22 +44,21 @@ export class PIDAEnrollmentFlow implements EnrollmentFlow {
         return step as EnrollmentStep<PIStepTypeMap[K]["input"], PIStepTypeMap[K]["output"]>;
     }
 
-    async SubmitStep(stepKey: string, payload: any): Promise<StepSubmissionResult> {
+    async submitStep(stepKey: string, payload: any): Promise<StepSubmissionResult> {
         const key = this.resolveKey(stepKey);
         const step = this.internalGetStep(key);
-        await step.Submit(payload);
+        await step.submit(payload);
         return new StepSubmissionResult();
     }
 
-    GetStep(stepKey: string): EnrollmentStep<any, any> {
+    getStep(stepKey: string): EnrollmentStep<any, any> {
         const key = this.resolveKey(stepKey);
         return this.internalGetStep(key);
     }
 
-    GetCurrentStep(): EnrollmentStep<any, any> {
-        // TODO: quando houver mais de um step, derivar o "atual" de uma fonte
-        // de progresso (orquestrador ou estado persistido). Por ora, retorna
-        // o primeiro registrado na ordem do Map.
+    // TODO(fluxo): ajustar para validar os steps nativos, talvez recebendo uma
+    //   toggle do service para liberar a release de steps específicos.
+    getCurrentStep(): EnrollmentStep<any, any> {
         const first = this.steps.values().next();
         if (first.done) {
             throw new Error("no steps registered");
@@ -74,11 +67,8 @@ export class PIDAEnrollmentFlow implements EnrollmentFlow {
     }
 
     static create(
-        aveRepository: EnrollmentStepRepository,
-        pm5Repository: EnrollmentStepRepository,
-        logger: Logger,
-        trace: Trace,
+        steps: Map<PIStepKey, EnrollmentStep<any, any>>,
     ): PIDAEnrollmentFlow {
-        return new PIDAEnrollmentFlow(aveRepository, pm5Repository, logger, trace);
+        return new PIDAEnrollmentFlow(steps);
     }
 }

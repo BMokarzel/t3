@@ -1,0 +1,1 @@
+{"version":3,"file":"supergraph.contract.d.ts","sourceRoot":"","sources":["../../contract/supergraph.contract.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,UAAU;IACvB,aAAa,IAAI,OAAO,CAAC,UAAU,CAAC,CAAA;CACvC;AAED,qBAAa,UAAU;IAEnB,aAAa,CAAC,EAAE,OAAO,CAAA;IACvB,eAAe,CAAC,EAAE,OAAO,CAAA;CAC5B"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"service.contract.d.ts","sourceRoot":"","sources":["../../contract/service.contract.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,iBAAiB;IAC9B,SAAS,CAAC,QAAQ,EAAE,OAAO,GAAG,OAAO,CAAC,gBAAgB,CAAC,CAAC;IAGxD,UAAU,CAAC,OAAO,EAAE,MAAM,EAAE,OAAO,EAAE,GAAG,GAAG,OAAO,CAAC,oBAAoB,CAAC,CAAC;CAC5E;AAQD,qBAAa,gBAAgB;CAAG;AAEhC,qBAAa,oBAAoB;CAAG"}
